@@ -32,4 +32,4 @@ jobs:
           ECR_REGISTIRY: ${{ steps.login-ecr.outputs.registry }}  
         run: |
           docker-compose build  
-          docker-compose push
+          docker-compose push $ECR_REGISTIRY/$ECR_REPOSITORY:pos-$GITHUB_SHA
