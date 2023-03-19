@@ -31,5 +31,8 @@ jobs:
         env: 
           ECR_REGISTIRY: ${{ steps.login-ecr.outputs.registry }}  
         run: |
-          docker-compose build  
-          docker-compose push $ECR_REGISTIRY/$ECR_REPOSITORY:pos-$GITHUB_SHA
+          docker-compose -f docker-compose.yml build --parallel
+          docker tag app $ECR_REGISTIRY/$ECR_REPOSITORY:pos-$GITHUB_SHA
+          docker tag postgres $ECR_REGISTIRY/$ECR_REPOSITORY:postgres-$GITHUB_SHA
+          docker push $ECR_REGISTIRY/$ECR_REPOSITORY:pos-$GITHUB_SHA
+          docker push $ECR_REGISTIRY/$ECR_REPOSITORY:postgres-$GITHUB_SHA
