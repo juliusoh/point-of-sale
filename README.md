@@ -2,7 +2,7 @@
 A POS (Point of Sale) application for restaurant workers who want to receive orders, take seats, pay bills, customize menus, see a wait list and sales report.
 
 ## Live Demo
-[Link to Live Site](https://pos.jsonkim.com)
+[Link to Live Site](https://pos.juliusoh.com)
 
 ## Features
 1. Users can view the floor plan of the restaurant
@@ -32,7 +32,7 @@ A POS (Point of Sale) application for restaurant workers who want to receive ord
 ## Getting Started
 #### 1. Clone the repository and navigate to the directory
 ```shell
-git clone https://github.com/jasonkim-jk/point-of-sale.git
+git clone https://github.com/juliusoh/point-of-sale.git
 cd point-of-sale
 ```
 
@@ -63,6 +63,10 @@ npm run dev
 
 #### 6. Access application by entering [https://localhost:3000](https://localhost:3000) in the browser.
 
+
+```
+cat database/dump.sql | docker exec -i 45b5bb764fc2 psql -U pos -d pos
+```
 
 ## Lessons Learned
 * Building a full-stack application in a group-environment

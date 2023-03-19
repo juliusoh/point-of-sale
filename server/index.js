@@ -55,6 +55,10 @@ function getDbParam(orderId, items) {
 
 app.use('/api', headersMiddleware);
 
+app.get('/api/healthcheck', (req, res, next) => {
+  res.status(200).json({ message: 'ok' });
+});
+
 app.get('/api/restaurant', (req, res, next) => {
   const sql = `
   with "openChecks" as (
