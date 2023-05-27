@@ -1,5 +1,5 @@
 # Point of Sale
-A POS (Point of Sale) application for restaurant workers who want to receive orders, take seats, pay bills, customize menus, see a wait list and sales report.
+A POS (Point of Sale) application for restaurant workers who want to receive orders, take seats, pay bills, customize menus, see a wait list and sales report!
 
 ## Live Demo
 [Link to Live Site](https://pos.juliusoh.com)
