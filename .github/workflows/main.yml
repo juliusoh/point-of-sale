@@ -10,7 +10,7 @@ on :
 
 env:
   ECR_REPOSITORY: juliusoh
-  IMAGE_TAG: pos-$GITHUB_SHA
+  IMAGE_TAG: pos-${{ github.sha}}
 
 jobs: 
   build-and-push:
