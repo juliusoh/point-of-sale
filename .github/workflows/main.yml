@@ -10,6 +10,7 @@ on :
 
 env:
   ECR_REPOSITORY: juliusoh
+  IMAGE_TAG: pos-$GITHUB_SHA
 
 jobs: 
   build-and-push:
@@ -31,5 +32,48 @@ jobs:
         env: 
           ECR_REGISTIRY: ${{ steps.login-ecr.outputs.registry }}  
         run: |
-          docker build -t $ECR_REGISTIRY/$ECR_REPOSITORY:pos-$GITHUB_SHA .
-          docker push $ECR_REGISTIRY/$ECR_REPOSITORY:pos-$GITHUB_SHA
+          docker build -t $ECR_REGISTIRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTIRY/$ECR_REPOSITORY:$IMAGE_TAG
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: 'dest'
+          ref: 'main'
+          repository: 'juliusoh/portfolio-helm-charts'
+          token: ${{ secrets.PERSONAL_TOKEN }}
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch   
+      - name: Update Image Tag
+        working-directory: dest
+        run: |
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CC86BB64
+          sudo add-apt-repository ppa:rmescandon/yq
+          sudo apt update
+          sudo apt install yq -y
+          cd point-of-sale
+          yq eval ".image.tag = \"$IMAGE_TAG\"" -i values.yaml
+      - name: Update Git Changes
+        id: newFiles
+        shell: bash
+        working-directory: dest
+        run: |
+          git add -A
+          git status --porcelain | wc -l
+          if [ $(git status --porcelain | wc -l) -gt 0 ]; then
+            echo "::set-output name=changed::true"
+          else
+            echo "::set-output name=changed::false"
+          fi
+      - name: Commit and Push
+        shell: bash
+        if: steps.newFiles.outputs.changed == 'true'
+        working-directory: dest
+        run: |
+          git config --global user.email "juliusoh@gmail.com"
+          git config --global user.name "juliusoh"
+          git commit -m "Update image tag from reference ${{ github.sha }}"
+          git push
